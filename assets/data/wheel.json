@@ -1,0 +1,37 @@
+[
+    {
+        "name": "JavaScript",
+        "color": "#ffffff",
+        "text_color": "#000000"
+    },
+    {
+        "name": "C",
+        "color": "#ff00ff",
+        "text_color": "#000000"
+    },
+    {
+        "name": "Java",
+        "color": "#00ffff",
+        "text_color": "#000000"
+    },
+    {
+        "name": "Python",
+        "color": "#ffff00",
+        "text_color": "#000000"
+    },
+    {
+        "name": "PHP",
+        "color": "#00ff00",
+        "text_color": "#000000"
+    },
+    {
+        "name": "Rust",
+        "color": "#fff000",
+        "text_color": "#000000"
+    },
+    {
+        "name": "C++",
+        "color": "#dff0df",
+        "text_color": "#000000"
+    }
+]

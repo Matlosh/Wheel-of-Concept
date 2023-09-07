@@ -1,7 +1,8 @@
 import { create_indicator, draw_indicator } from "indicator";
 import { get_drawn_element } from "mechanics";
 
-const create_wheel = (ctx, x, y, radius, elements_count, should_create_indicator) => {    
+const create_wheel = (ctx, x, y, radius, elements, should_create_indicator) => {    
+    const elements_count = elements.length;
     const degree_step = 360 / elements_count;
 
     let wheel = {
@@ -15,7 +16,7 @@ const create_wheel = (ctx, x, y, radius, elements_count, should_create_indicator
     
     for(let i = 0; i < elements_count; i++) {
         wheel.elements.push({
-            'element': i,
+            'element': elements[i],
             'degree_start': (degree_step * i),
             'degree_end': (degree_step * (i + 1))
         });
@@ -26,25 +27,38 @@ const create_wheel = (ctx, x, y, radius, elements_count, should_create_indicator
 
 const draw_wheel = (wheel) => {
     wheel.elements.forEach((element, i) => {
-        wheel.ctx.fillStyle = `rgb(${10 * i}, 100, 100)`;
+        wheel.ctx.save();
+        
+        // Change coloring later
+        wheel.ctx.fillStyle = element.element.color;
         wheel.ctx.beginPath();
         wheel.ctx.moveTo(wheel.x, wheel.y);
         wheel.ctx.arc(wheel.x, wheel.y, wheel.radius, (Math.PI / 180) * element.degree_start, (Math.PI / 180) * element.degree_end, false);
         wheel.ctx.lineTo(wheel.x, wheel.y);
         wheel.ctx.fill();
 
-        // how to show text inside each element?
-        // wheel.ctx.fillStyle = `rgb(255, 255, 255)`;
-        // wheel.ctx.font = "48px";
-        // wheel.ctx.fillText("Test message", wheel.x, wheel.y);
+        wheel.ctx.fillStyle = element.element.text_color;
+        wheel.ctx.font = "18px sans-serif";
+
+        // Rotates in arbitrary point
+        wheel.ctx.translate(300, 300);
+        wheel.ctx.rotate((Math.PI / 180) * (element.degree_start + element.degree_end) / 2);
+        wheel.ctx.translate(-300, -300);
+
+        wheel.ctx.fillText(element.element.name, wheel.x + 100, wheel.y + 5);
+        wheel.ctx.restore();
     });
 
     if(wheel.indicator !== null)
         draw_indicator(wheel.indicator);
 };
 
-const spin_wheel = (wheel, spin_step) => {
+// Spins a wheel and (if provided) manages start button and wheel output
+const spin_wheel = (wheel, spin_step, start_button = null, wheel_output = null) => {
     let random_num = parseInt(Math.random() * 1000 + 100);
+
+    if(start_button !== null)
+        start_button.classList.add('active');
 
     let counter = 0;
     const interval = setInterval(function() {
@@ -60,8 +74,13 @@ const spin_wheel = (wheel, spin_step) => {
         if(random_num <= counter) {
             clearInterval(interval);
             // Maybe refactor it later to some kind of Promise or sth
-            const drawn_element = get_drawn_element(wheel, 180);
-            console.log(drawn_element);
+            const drawn_element = get_drawn_element(wheel, 270);
+
+            if(start_button !== null)
+                start_button.classList.remove('active');
+
+                if(wheel_output !== null)
+                    wheel_output.textContent = `${drawn_element.element.name} won!`;
         }
     }, 1);
 };

@@ -12,14 +12,22 @@
             "imports": {
                 "wheel": "./modules/wheel.js",
                 "indicator": "./modules/indicator.js",
-                "mechanics": "./modules/mechanics.js"
+                "mechanics": "./modules/mechanics.js",
+                "wheel_data": "./assets/data/wheel.json"
             }
         }
     </script>
 </head>
 
 <body>
-    <canvas id="wheel" width="600" height="600">Wheel drawn in canvas.</canvas>
+    <section id="content">
+        <div class="wheel-container">
+            <canvas id="wheel" width="600" height="600">Wheel drawn in canvas.</canvas>
+            <div class="start-button flex-container align-center justify-center">Spin!</div>
+        </div>
+
+        <p id="wheel-output"></p>
+    </section>
 
     <script type="module" src="./assets/js/main.js"></script>
 </body>

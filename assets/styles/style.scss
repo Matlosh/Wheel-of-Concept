@@ -41,6 +41,7 @@
 
 // Variables
 $background: #272727;
+$black: #000000;
 $white: #ffffff;
 
 // General styles
@@ -55,6 +56,59 @@ body {
     background-color: $background;
 }
 
-#wheel {
-    border: 1px solid $white;
+h1, h2, h3, h4, h5, h6, p, span, a, em {
+    color: $white;
+}
+
+// Mixins
+
+@mixin hover_pointer() {
+    &:hover {
+        cursor: pointer;    
+    }
+}
+
+// General classes
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.align-center {
+    align-items: center;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+// Site elements styles
+#content {
+
+    .wheel-container {
+        width: fit-content;
+        position: relative;
+
+        #wheel {
+            border: 1px solid $white;
+        }
+
+        .start-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 5rem;
+            height: 5rem;
+            background-color: $white;
+            border: 1px solid $black;
+            border-radius: 50%;
+            @include hover_pointer();
+
+            &.active {
+                pointer-events: none;
+                opacity: .5;
+            }
+        }
+    }
 }
