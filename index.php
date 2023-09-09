@@ -14,7 +14,8 @@
                 "indicator": "./modules/indicator.js",
                 "mechanics": "./modules/mechanics.js",
                 "reusable": "./modules/reusable.js",
-                "wheel_data": "./assets/data/wheel.json"
+                "control_panel": "./modules/control_panel.js",
+                "data/": "./assets/data/"
             }
         }
     </script>
@@ -23,7 +24,9 @@
 <body>
     <?php include_once './partials/reusable.php'; ?>
 
-    <section id="content">
+    <section id="content" class="flex-container align-center justify-center dir-column">
+        <h2>Wheel name</h2>
+
         <div class="wheel-container">
             <canvas id="wheel" width="600" height="600">Wheel drawn in canvas.</canvas>
             <div class="start-button flex-container align-center justify-center">Spin!</div>
@@ -33,30 +36,22 @@
     </section>
 
     <nav id="control-panel" class="expanded">
-        <h2>Wheel settings</h2>
-
-        <div class="form-group flex-container dir-row">
-            <label for="test">Test setting</label>
-            <input type="text" name="test" autocomplete="off">
-            <span>Some additional info about above setting.</span>
-        </div>
-
-        <div class="form-group flex-container dir-row">
-            <label for="test">Test setting</label>
-            <div class="input-container">
-                <input type="checkbox" name="checkbox">
+        <div class="panel-menu">
+            <div class="option menu">
+                <p>Menu</p>
             </div>
-            <span>Some additional info about above setting.</span>
         </div>
 
-        <div class="button">
-            <p>Save</p>
-        </div>
+        <div class="panel-container"></div>
 
         <div id="shrink-expand-button" class="shrink">
             <?php echo arrow_icon(); ?>
         </div>
     </nav>
+
+    <div id="info-box">
+        <p>Saved!</p>
+    </div>
 
     <script type="module" src="./assets/js/main.js"></script>
 </body>

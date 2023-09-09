@@ -44,6 +44,8 @@ $background-lighter: #424242;
 $background: #272727;
 $background-2: #1D1D1D;
 $success: #0CB700;
+$error: #F40000;
+$warning: #F4DE00;
 $black: #000000;
 $white: #ffffff;
 
@@ -57,6 +59,8 @@ $white: #ffffff;
 
 body {
     background-color: $background;
+    position: relative;
+    height: 100vh;
 }
 
 h1, h2, h3, h4, h5, h6, p, span, a, em {
@@ -68,6 +72,18 @@ h1, h2, h3, h4, h5, h6, p, span, a, em {
 @mixin hover_pointer() {
     &:hover {
         cursor: pointer;    
+    }
+}
+
+@mixin hover_color($color: unset, $background_color: unset) {
+    &:hover {
+        @if $color != unset {
+            color: $color;
+        }
+
+        @if $background_color != unset {
+            background-color: $background_color;
+        }
     }
 }
 
@@ -103,13 +119,14 @@ h1, h2, h3, h4, h5, h6, p, span, a, em {
 
 // Site elements styles
 #content {
+    height: 100%;
 
     .wheel-container {
         width: fit-content;
         position: relative;
 
         #wheel {
-            border: 1px solid $white;
+            // border: 1px solid $white;
         }
 
         .start-button {
@@ -129,6 +146,10 @@ h1, h2, h3, h4, h5, h6, p, span, a, em {
                 opacity: .5;
             }
         }
+    }
+    
+    #wheel-output {
+        height: 1rem;       
     }
 }
 
@@ -153,9 +174,26 @@ h1, h2, h3, h4, h5, h6, p, span, a, em {
         right: -22rem;
     }
 
+    .panel-menu {
+        margin-bottom: .5rem;
+
+        .option {
+            @include hover_pointer();
+
+            p {
+                width: fit-content;
+                padding: 0 .5rem;
+                border: 2px solid rgba($white, .7);
+                border-top: 0;
+                border-bottom-left-radius: .2rem;
+                border-bottom-right-radius: .2rem;
+            }
+        }
+    }
+
     .form-group {
         position: relative;
-        margin: .5rem 0;
+        padding: .5rem 0;
 
         &:has(input[type="checkbox"]) {
             align-items: center;
@@ -253,6 +291,39 @@ h1, h2, h3, h4, h5, h6, p, span, a, em {
         }
     }
 
+    .redirect-to-controls {
+        user-select: none;
+        @include hover_pointer();
+
+        &:hover {
+
+            p {
+                color: rgba($white, .4);
+            }
+
+            svg {
+                fill: rgba($white, .4) !important;
+            }
+        }
+
+        svg, p {
+            transition: .15s all ease-in-out;
+        }
+
+        .arrow-icon {
+
+            svg {
+                width: 2rem;
+                height: 2rem;
+                fill: rgba($white, .7);
+                position: absolute;
+                top: 50%;
+                right: 0;
+                transform: translate(0, -50%);
+            }
+        }
+    }
+
     .button {
         width: 5rem;
         min-width: 5rem;
@@ -295,5 +366,62 @@ h1, h2, h3, h4, h5, h6, p, span, a, em {
             height: 100%;
             fill: rgba($white, .7);
         }
+    }
+}
+
+// Info box
+#info-box {
+    position: fixed;
+    background-color: $background-2;
+    padding: .25rem 1.25rem;
+    border-radius: .25rem;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, -2rem);
+    display: none;
+
+    @mixin box_shadow($color) {
+        box-shadow: 0px 0px 8px 2px rgba($color, 0.75);
+    }
+
+    @mixin slide_generator($animation_name, $translate_y_from, $translate_y_to) {
+        @keyframes #{$animation_name} {
+            from {
+                transform: translate(-50%, $translate_y_from);
+            }
+
+            to {
+                transform: translate(-50%, $translate_y_to);
+            }
+        }
+    }
+
+    @include slide_generator(slide_in, 3rem, -2rem);
+    @include slide_generator(slide_out, -2rem, 3rem);
+
+    &.active {
+        display: block;
+        animation: slide_in 2s;
+    }
+
+    &.closing {
+        transform: translate(-50%, 3rem);
+        animation: slide_out 2s;
+    }
+    
+    &.success {
+        @include box_shadow($success);
+    }
+
+    &.error {
+        @include box_shadow($error);
+    }
+
+    &.warning {
+        @include box_shadow($warning);
+    }
+
+    &.default {
+        @include box_shadow($background);
     }
 }

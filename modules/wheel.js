@@ -64,11 +64,11 @@ const spin_wheel = (wheel, spin_step, start_button = null, wheel_output = null) 
     const interval = setInterval(function() {
         wheel.ctx.clearRect(0, 0, 600, 600);
 
-        draw_wheel(wheel);
         wheel.elements.forEach(element => {
             element.degree_start = element.degree_start + spin_step;
             element.degree_end = element.degree_end + spin_step;
         });
+        draw_wheel(wheel);
 
         counter++;
         if(random_num <= counter) {

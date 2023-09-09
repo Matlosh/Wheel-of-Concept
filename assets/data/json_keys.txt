@@ -1,0 +1,8 @@
+Small file explaining keys that are available in the json files:
+
+controls.json (option keys):
+name -> name of the option
+type -> type of the option (available: text, submit, redirect-to-controls)
+redirect_to -> controls name that redirect-to-controls option should redirect to
+additional_info -> additional information that appears below option
+save -> should the option be saved in localStorage if f.e. clicking "save" or similar button

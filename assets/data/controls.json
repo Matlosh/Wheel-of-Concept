@@ -1,0 +1,33 @@
+{
+    "menu": {
+        "title": "Menu",
+        "options": [
+            {
+                "name": "Create Wheel",
+                "type": "redirect-to-controls",
+                "redirect_to": "create_wheel"
+            }
+        ]
+    },
+    "create_wheel": {
+        "title": "Create Wheel",
+        "options": [
+            {
+                "name": "Wheel title",
+                "type": "text",
+                "save": true
+            },
+            {
+                "name": "Elements",
+                "type": "text",
+                "additional_info": "All elements must be separated with a comma.",
+                "save": true
+            },
+            {
+                "name": "Create",
+                "type": "submit",
+                "append_to": "wheels"
+            }
+        ]
+    }
+}

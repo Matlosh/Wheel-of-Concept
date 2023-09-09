@@ -1,6 +1,8 @@
 import { create_wheel, draw_wheel, spin_wheel } from "wheel";
-import wheel_data from "wheel_data" assert { type: 'json' };
 import { class_switch } from "reusable";
+import { inflate_panel } from "control_panel";
+import wheel_data from "data/wheel.json" assert { type: 'json' };
+import controls_data from "data/controls.json" assert { type: 'json' };
 
 const canvas_init = () => {
     const canvas = document.querySelector('#wheel');
@@ -34,8 +36,17 @@ const menu_behavior = () => {
     });
 };
 
+const control_panel_init = () => {
+    const control_panel_container = document.querySelector('#control-panel > .panel-container');
+    inflate_panel(controls_data, 'menu', control_panel_container);
+
+    const panel_menu_menu = document.querySelector('#control-panel > .panel-menu > .menu');
+    panel_menu_menu.addEventListener('click', () => inflate_panel(controls_data, 'menu', control_panel_container));
+};
+
 window.addEventListener('load', e => {
     if(!canvas_init()) alert("Canvas is not supported.");
 
     menu_behavior();
+    control_panel_init();
 });
