@@ -1,4 +1,11 @@
 import { arrow_icon, display_info_box } from "reusable";
+import templates_data from "data/templates.json" assert { type: 'json' };
+
+const test_func = () => console.log('test');
+
+const CONTROL_PANEL_ACTIONS = {
+    'display_wheels_action': test_func
+};
 
 const create_input = (option) => {
     let option_name_slug = option.name.toLowerCase().replace(' ', '_');
@@ -78,15 +85,76 @@ const prepare_submit = (controls_json, controls_slug) => {
 const inflate_panel = (controls_json, controls_slug, element) => {
     const controls = controls_json[controls_slug];
     let menu_html = `<h2>${controls.title}</h2>`;
-
+    
     element.innerHTML = '';
-    controls.options.forEach(option => {
-        menu_html += create_input(option);
-    });
+    if(!controls.hasOwnProperty('options') && controls.hasOwnProperty('action')) {
+        CONTROL_PANEL_ACTIONS[controls['action']]();
+    }
+
+    if(controls.hasOwnProperty('options')) {
+        controls.options.forEach(option => {
+            menu_html += create_input(option);
+        });
+    }
     element.insertAdjacentHTML('beforeend', menu_html);
+    // continue here with making dynamic actions for control panels
 
     prepare_redirect_inputs(controls_json, element);
     prepare_submit(controls_json, controls_slug);
+};
+
+// Finds template name in the controls_data and returns it or empty string if not found
+const find_template_name = (controls_data) => {
+    let template_name = '';
+    controls_data.options.forEach(option => {
+        if(option.type === 'submit' && option.hasOwnProperty('template_name'))
+            template_name = option.template_name;
+    });
+
+    return template_name;
+};
+
+// Creates json using data from controls_data by mapping it with template_json rules
+const create_json_from_template = (template_json, controls_data) => {
+    let json = {};
+    let template_name = find_template_name(controls_data);
+
+    controls_data.options.forEach(option => {
+        let option_name_slug = option.name.toLowerCase().replace(' ', '_');
+        const option_input = document.querySelector(`#control-panel .panel-container input[name="${option_name_slug}"]`);
+
+        if(option.hasOwnProperty('template_key') && !option.hasOwnProperty('template_key_function')) {
+            json[option.template_key] = option_input.value;
+        }
+
+        if(option.hasOwnProperty('template_key') && option.hasOwnProperty('template_key_function')
+            && option.hasOwnProperty('template_key_parent')) {
+            let option_value = option_input.value;
+            const template_key = option.template_key;
+            const template_key_parent = option.template_key_parent;
+
+            if(json[template_key_parent] === undefined)
+                json[template_key_parent] = [];
+
+            if(option.template_key_function === 'split') {
+                let option_values = option_value.split(',');
+                
+                for(let i = 0; i < option_values.length; i++) {
+                    if(json[template_key_parent][i] === undefined) {
+                        let element = {};
+                        element[template_key] = option_values[i].trim();
+
+                        json[template_key_parent][i] = element;
+                        continue;
+                    }
+
+                    json[template_key_parent][i][template_key] = option_values[i].trim();
+                }
+            }
+        }
+    });
+
+    return json;
 };
 
 // Appends or removes data to/from the passed setting
@@ -96,8 +164,15 @@ const manage_existing_setting = (submit_option, settings, controls_json, control
 
     if(!settings.hasOwnProperty(append_to)) settings[append_to] = [];
 
-    if(action === 'append_to') {
+    switch(action) {
+        case 'append_to':
+            const json = create_json_from_template(templates_data, controls_json[controls_slug]);
+            settings[append_to].push(json);
+        break;
 
+        case 'remove_from':
+            // not implemented yet
+        break;
     }
 
     display_info_box('Created new wheel!', 'success');

@@ -1,0 +1,12 @@
+{
+    "wheel": {
+        "name": "wheel_name",
+        "elements": [
+            {
+                "name": "element_name",
+                "color": "element_background_color",
+                "text_color": "element_text_color"   
+            }
+        ]
+    }
+}

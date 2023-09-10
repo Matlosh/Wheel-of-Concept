@@ -6,6 +6,11 @@
                 "name": "Create Wheel",
                 "type": "redirect-to-controls",
                 "redirect_to": "create_wheel"
+            },
+            {
+                "name": "Choose current Wheel",
+                "type": "redirect-to-controls",
+                "redirect_to": "choose_wheel"
             }
         ]
     },
@@ -15,19 +20,28 @@
             {
                 "name": "Wheel title",
                 "type": "text",
-                "save": true
+                "save": true,
+                "template_key": "name"
             },
             {
                 "name": "Elements",
                 "type": "text",
                 "additional_info": "All elements must be separated with a comma.",
-                "save": true
+                "save": true,
+                "template_key_parent": "elements",
+                "template_key_function": "split",
+                "template_key": "name"
             },
             {
                 "name": "Create",
                 "type": "submit",
-                "append_to": "wheels"
+                "append_to": "wheels",
+                "template_name": "wheel"
             }
         ]
+    },
+    "choose_wheel": {
+        "title": "Choose current Wheel",
+        "action": "display_wheels_action"
     }
 }

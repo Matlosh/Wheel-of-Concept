@@ -10,7 +10,7 @@ const canvas_init = () => {
 
     const ctx = canvas.getContext('2d');
 
-    let wheel = create_wheel(ctx, 300, 300, 250, wheel_data, true);
+    let wheel = create_wheel(ctx, 300, 300, 250, wheel_data.elements, true);
     draw_wheel(wheel);
 
     const wheel_output = document.querySelector('#wheel-output');

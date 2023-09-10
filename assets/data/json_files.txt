@@ -1,0 +1,27 @@
+Small file explaining json files and keys that are available in these files:
+
+controls.json (option keys):
+    title -> title display in the menu
+    action -> (must be set in place of options!) allows to dynamically load more custom controls
+
+    all:
+        name -> name of the option
+        type -> type of the option (available: text, submit, redirect-to-controls)
+        additional_info -> additional information that appears below option
+        template_key -> key that this control's value will be attached to in created json
+        template_key_function -> additional function that will be executed on the "template_key" control's value
+        template_key_parent -> (only if template_key_function is present) parent (in json hierarchy) of the "template_key" control's value
+
+    redirect-to-controls:
+        redirect_to -> controls name that redirect-to-controls option should redirect to
+
+    submit:
+        save -> should the option be saved in localStorage if f.e. clicking "save" or similar button
+        append_to -> name of the key of the array that this controls data should be appended to
+        remove_from -> 
+        template_name ->
+
+(unused)
+templates.json - contains templates for creating json files from the controls options
+    key corresponds to the real name of the field in the target file
+    value is a name that can be used in controls json file (template_key) to ...
