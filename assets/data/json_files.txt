@@ -2,7 +2,8 @@ Small file explaining json files and keys that are available in these files:
 
 controls.json (option keys):
     title -> title display in the menu
-    action -> (must be set in place of options!) allows to dynamically load more custom controls
+    action -> (must be set in place of options!) allows to dynamically load more
+        unconventional controls
 
     all:
         name -> name of the option

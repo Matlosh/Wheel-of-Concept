@@ -1,10 +1,19 @@
-import { arrow_icon, display_info_box } from "reusable";
+import { arrow_icon, display_info_box, SETTINGS_ITEM_NAME } from "reusable";
 import templates_data from "data/templates.json" assert { type: 'json' };
+import { display_wheels } from "control_panel_actions"; 
 
-const test_func = () => console.log('test');
-
+// Each action must return true if resolved, else false
 const CONTROL_PANEL_ACTIONS = {
-    'display_wheels_action': test_func
+    'display_wheels_action': display_wheels
+};
+
+// Control's input template
+const get_input_template = (additional_classes, additional_data, inner_html) => {
+    return `
+        <div class="form-group flex-container dir-row ${additional_classes}" ${additional_data}>
+            ${inner_html}
+        </div>
+    `;
 };
 
 const create_input = (option) => {
@@ -14,39 +23,31 @@ const create_input = (option) => {
 
     switch(option.type) {
         case 'redirect-to-controls':
-            input_html = `
-                <div class="form-group flex-container dir-row ${option.type}"
-                    data-redirect-to="${option.redirect_to}">
-                    <p>${option.name}</p>
-                    <div class="arrow-icon">
-                        ${arrow_icon()}
-                    </div>
-                </div>
-            `;
+            input_html = get_input_template(option.type, `data-redirect-to="${option.redirect_to}"`, `
+                <p>${option.name}</p>
+                <div class="arrow-icon">
+                    ${arrow_icon()}
+                </div>`);
         break;
 
         case 'submit':
         case 'button':
-            input_html = `
-                <div class="form-group flex-container dir-column ${option.type}">
-                    <div class="button">
-                        <p>${option.name}</p>
-                    </div>
-                    <span>${option_additional_info}</span>
+            input_html = get_input_template(option.type, '', `
+                <div class="button">
+                    <p>${option.name}</p>
                 </div>
-            `;
+                <span>${option_additional_info}</span>
+            `);
         break;
 
         default:
-            input_html = `
-                <div class="form-group flex-container dir-row ${option.type}">
-                    <label for="${option_name_slug}">${option.name}</label>
-                    ${option.type === 'checkbox' ? '<div class="input-container">' : ''}
-                        <input type="${option.type}" name="${option_name_slug}" autocomplete="off">
-                    ${option.type === 'checkbox' ? '</div>' : ''}
-                    <span>${option_additional_info}</span>
-                </div>
-            `;
+            input_html = get_input_template(option.type, '', `
+                <label for="${option_name_slug}">${option.name}</label>
+                ${option.type === 'checkbox' ? '<div class="input-container">' : ''}
+                    <input type="${option.type}" name="${option_name_slug}" autocomplete="off">
+                ${option.type === 'checkbox' ? '</div>' : ''}
+                <span>${option_additional_info}</span>
+            `);
     }
 
     return input_html;
@@ -88,7 +89,7 @@ const inflate_panel = (controls_json, controls_slug, element) => {
     
     element.innerHTML = '';
     if(!controls.hasOwnProperty('options') && controls.hasOwnProperty('action')) {
-        CONTROL_PANEL_ACTIONS[controls['action']]();
+        CONTROL_PANEL_ACTIONS[controls['action']](element);
     }
 
     if(controls.hasOwnProperty('options')) {
@@ -96,8 +97,7 @@ const inflate_panel = (controls_json, controls_slug, element) => {
             menu_html += create_input(option);
         });
     }
-    element.insertAdjacentHTML('beforeend', menu_html);
-    // continue here with making dynamic actions for control panels
+    element.insertAdjacentHTML('afterbegin', menu_html);
 
     prepare_redirect_inputs(controls_json, element);
     prepare_submit(controls_json, controls_slug);
@@ -117,6 +117,7 @@ const find_template_name = (controls_data) => {
 // Creates json using data from controls_data by mapping it with template_json rules
 const create_json_from_template = (template_json, controls_data) => {
     let json = {};
+    json['id'] = Date.now();
     let template_name = find_template_name(controls_data);
 
     controls_data.options.forEach(option => {
@@ -196,10 +197,12 @@ const override_control_setting_options = (settings, controls_json, controls_slug
 
 // Saves settings to the localStorage
 const save_settings = (controls_json, controls_slug) => {
-    let settings = JSON.parse(localStorage.getItem('settings'));
+    let settings = JSON.parse(localStorage.getItem(SETTINGS_ITEM_NAME));
 
-    if(!settings)
-        localStorage.setItem('settings', '{}');
+    if(!settings) {
+        localStorage.setItem(SETTINGS_ITEM_NAME, '{}');
+        settings = {};
+    }
 
     // Searches for a submit option
     let submit_option = '';
@@ -213,7 +216,7 @@ const save_settings = (controls_json, controls_slug) => {
     else
         override_control_setting_options(settings, controls_json, controls_slug);
 
-    localStorage.setItem('settings', JSON.stringify(settings));
+    localStorage.setItem(SETTINGS_ITEM_NAME, JSON.stringify(settings));
 };
 
-export { inflate_panel, save_settings };
+export { inflate_panel, save_settings, get_input_template };

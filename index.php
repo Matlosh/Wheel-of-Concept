@@ -15,6 +15,7 @@
                 "mechanics": "./modules/mechanics.js",
                 "reusable": "./modules/reusable.js",
                 "control_panel": "./modules/control_panel.js",
+                "control_panel_actions": "./modules/control_panel_actions.js",
                 "data/": "./assets/data/"
             }
         }

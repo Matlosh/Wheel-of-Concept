@@ -1,7 +1,7 @@
 import { create_wheel, draw_wheel, spin_wheel } from "wheel";
 import { class_switch } from "reusable";
 import { inflate_panel } from "control_panel";
-import wheel_data from "data/wheel.json" assert { type: 'json' };
+import wheel_data from "data/wheels.json" assert { type: 'json' };
 import controls_data from "data/controls.json" assert { type: 'json' };
 
 const canvas_init = () => {
@@ -10,7 +10,7 @@ const canvas_init = () => {
 
     const ctx = canvas.getContext('2d');
 
-    let wheel = create_wheel(ctx, 300, 300, 250, wheel_data.elements, true);
+    let wheel = create_wheel(ctx, 300, 300, 250, wheel_data[0].elements, true);
     draw_wheel(wheel);
 
     const wheel_output = document.querySelector('#wheel-output');
