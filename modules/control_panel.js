@@ -1,10 +1,11 @@
 import { arrow_icon, display_info_box, SETTINGS_ITEM_NAME } from "reusable";
 import templates_data from "data/templates.json" assert { type: 'json' };
-import { display_wheels } from "control_panel_actions"; 
+import { display_available_wheels, display_wheels_to_delete } from "control_panel_actions"; 
 
 // Each action must return true if resolved, else false
 const CONTROL_PANEL_ACTIONS = {
-    'display_wheels_action': display_wheels
+    'display_available_wheels_action': display_available_wheels,
+    'display_wheels_to_delete_action': display_wheels_to_delete
 };
 
 // Control's input template

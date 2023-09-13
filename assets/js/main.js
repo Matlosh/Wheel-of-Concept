@@ -1,25 +1,12 @@
-import { create_wheel, draw_wheel, spin_wheel } from "wheel";
-import { class_switch } from "reusable";
+import { show_wheel } from "mechanics";
+import { class_switch, get_random_color_hex } from "reusable";
 import { inflate_panel } from "control_panel";
 import wheel_data from "data/wheels.json" assert { type: 'json' };
 import controls_data from "data/controls.json" assert { type: 'json' };
 
 const canvas_init = () => {
-    const canvas = document.querySelector('#wheel');
-    if(!canvas.getContext) return false;
-
-    const ctx = canvas.getContext('2d');
-
-    let wheel = create_wheel(ctx, 300, 300, 250, wheel_data[0].elements, true);
-    draw_wheel(wheel);
-
-    const wheel_output = document.querySelector('#wheel-output');
-    const start_button = document.querySelector('.start-button');
-    start_button.addEventListener('click', e => {
-        spin_wheel(wheel, 5, e.target, wheel_output);
-    });
-
-    return true;
+    const did_show = show_wheel(300, 300, 250, wheel_data[0].elements, true);
+    return did_show;
 };
 
 const menu_behavior = () => {

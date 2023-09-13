@@ -199,6 +199,10 @@ h1, h2, h3, h4, h5, h6, p, span, a, em {
             align-items: center;
         }
 
+        &.choose-wheel {
+            @include hover_pointer();
+        }
+
         label {
 
             &:has(+ input[type="text"]) {

@@ -54,7 +54,18 @@ const arrow_icon = () => {
     return `<?xml version="1.0" ?><!DOCTYPE svg  PUBLIC '-//W3C//DTD SVG 1.1//EN'  'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'><svg height="512px" id="Layer_1" style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="512px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><polygon points="160,128.4 192.3,96 352,256 352,256 352,256 192.3,416 160,383.6 287.3,256 "/></svg>`;
 };
 
+const get_random_color_hex = () => {
+    let color = '#';
+    
+    for(let i = 0; i < 3; i++) {
+        let random = parseInt(Math.random() * 255);
+        color += random.toString(16);
+    }
+
+    return color;
+};
+
 // Globally available variables
 const SETTINGS_ITEM_NAME = 'settings';
 
-export { class_switch, display_info_box, arrow_icon, SETTINGS_ITEM_NAME };
+export { class_switch, display_info_box, arrow_icon, get_random_color_hex, SETTINGS_ITEM_NAME };

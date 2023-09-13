@@ -1,3 +1,28 @@
+import { create_wheel, draw_wheel, spin_wheel } from "wheel";
+
+// Tries to show (render) wheel and returns true if successed, else false
+const show_wheel = (x, y, radius, elements, should_create_indicator) => {
+    
+    const canvas = document.querySelector('#wheel');
+    if(!canvas.getContext) return false;
+    
+    const ctx = canvas.getContext('2d');
+    
+    let wheel = create_wheel(ctx, x, y, radius, elements, should_create_indicator);
+    draw_wheel(wheel);
+    
+    const wheel_output = document.querySelector('#wheel-output');
+    const start_button = document.querySelector('.start-button');
+    const cloned_start_button = start_button.cloneNode(true);
+    start_button.parentNode.replaceChild(cloned_start_button, start_button);
+
+    cloned_start_button.addEventListener('click', e => {
+        spin_wheel(wheel, 5, e.target, wheel_output);
+    });
+
+    return true;
+};
+
 // Checks which element was drawn (was on indicator's degree) and returns it
 const get_drawn_element = (wheel, indicator_degree) => {
     let drawn_element = null;
@@ -14,4 +39,4 @@ const get_drawn_element = (wheel, indicator_degree) => {
     return drawn_element;
 };
 
-export { get_drawn_element };
+export { show_wheel, get_drawn_element };

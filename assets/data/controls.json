@@ -11,6 +11,11 @@
                 "name": "Choose current Wheel",
                 "type": "redirect-to-controls",
                 "redirect_to": "choose_wheel"
+            },
+            {
+                "name": "Choose Wheel to delete",
+                "type": "redirect-to-controls",
+                "redirect_to": "delete_wheel"
             }
         ]
     },
@@ -42,6 +47,10 @@
     },
     "choose_wheel": {
         "title": "Choose current Wheel",
-        "action": "display_wheels_action"
+        "action": "display_available_wheels_action"
+    },
+    "delete_wheel": {
+        "title": "Choose Wheel to delete",
+        "action": "display_wheels_to_delete_action"
     }
 }
