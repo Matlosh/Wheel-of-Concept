@@ -1,4 +1,4 @@
-import { arrow_icon, display_info_box, SETTINGS_ITEM_NAME } from "reusable";
+import { arrow_icon, display_info_box, clear_form, SETTINGS_ITEM_NAME } from "reusable";
 import templates_data from "data/templates.json" assert { type: 'json' };
 import { display_available_wheels, display_wheels_to_delete } from "control_panel_actions"; 
 
@@ -177,7 +177,7 @@ const manage_existing_setting = (submit_option, settings, controls_json, control
         break;
     }
 
-    display_info_box('Created new wheel!', 'success');
+    display_info_box('Created!', 'success');
 };
 
 // Override whole control setting options with new ones
@@ -218,6 +218,7 @@ const save_settings = (controls_json, controls_slug) => {
         override_control_setting_options(settings, controls_json, controls_slug);
 
     localStorage.setItem(SETTINGS_ITEM_NAME, JSON.stringify(settings));
+    clear_form('#control-panel > .panel-container');
 };
 
 export { inflate_panel, save_settings, get_input_template };

@@ -1,11 +1,11 @@
 import { show_wheel } from "mechanics";
-import { class_switch, get_random_color_hex } from "reusable";
+import { class_switch, WHEEL_X, WHEEL_Y, WHEEL_RADIUS, SHOULD_CREATE_INDICATOR } from "reusable";
 import { inflate_panel } from "control_panel";
 import wheel_data from "data/wheels.json" assert { type: 'json' };
 import controls_data from "data/controls.json" assert { type: 'json' };
 
 const canvas_init = () => {
-    const did_show = show_wheel(300, 300, 250, wheel_data[0].elements, true);
+    const did_show = show_wheel(WHEEL_X, WHEEL_Y, WHEEL_RADIUS, wheel_data[0].elements, SHOULD_CREATE_INDICATOR, wheel_data[0].id);
     return did_show;
 };
 

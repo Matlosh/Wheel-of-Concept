@@ -1,5 +1,6 @@
 import { create_indicator, draw_indicator } from "indicator";
 import { get_drawn_element } from "mechanics";
+import { trim_text, WHEEL_TEXT_MAX_LENGTH } from "reusable";
 
 const create_wheel = (ctx, x, y, radius, elements, should_create_indicator) => {    
     const elements_count = elements.length;
@@ -45,7 +46,7 @@ const draw_wheel = (wheel) => {
         wheel.ctx.rotate((Math.PI / 180) * (element.degree_start + element.degree_end) / 2);
         wheel.ctx.translate(-300, -300);
 
-        wheel.ctx.fillText(element.element.name, wheel.x + 100, wheel.y + 5);
+        wheel.ctx.fillText(trim_text(element.element.name, WHEEL_TEXT_MAX_LENGTH, '...'), wheel.x + 100, wheel.y + 5);
         wheel.ctx.restore();
     });
 

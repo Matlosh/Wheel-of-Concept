@@ -1,5 +1,12 @@
+// Globally available variables
 const INFO_BOX_ACTIVE_LENGTH = 4000;
 const INFO_BOX_ANIMATION_LENGTH = 2000;
+const SETTINGS_ITEM_NAME = 'settings';
+const WHEEL_X = 300;
+const WHEEL_Y = 300;
+const WHEEL_RADIUS = 250;
+const SHOULD_CREATE_INDICATOR = true;
+const WHEEL_TEXT_MAX_LENGTH = 10;
 
 // Simply checks if first (or second) class is available and if it is, switches
 const class_switch = (element, first_class, second_class) => {
@@ -65,7 +72,29 @@ const get_random_color_hex = () => {
     return color;
 };
 
-// Globally available variables
-const SETTINGS_ITEM_NAME = 'settings';
+const get_random_array_element = (array) => {
+    const random_index = Math.floor(Math.random() * array.length);
+    return array[random_index];
+};
 
-export { class_switch, display_info_box, arrow_icon, get_random_color_hex, SETTINGS_ITEM_NAME };
+const trim_text = (text, length, append_at_end = '') => {
+    const text_length = text.length;
+    let new_text = text;
+
+    if(text_length > length)
+        new_text = `${text.substr(0, length)}${append_at_end}`;
+
+    return new_text;
+};
+
+const clear_form = (parent_selector) => {
+    const parent = document.querySelector(parent_selector);
+    const inputs = parent.querySelectorAll('input');
+    inputs.forEach(input => {
+        input.value = '';
+    });
+};
+
+export { class_switch, display_info_box, arrow_icon, get_random_color_hex, get_random_array_element,
+    trim_text, clear_form, SETTINGS_ITEM_NAME, WHEEL_X, WHEEL_Y, WHEEL_RADIUS, SHOULD_CREATE_INDICATOR,
+    WHEEL_TEXT_MAX_LENGTH };

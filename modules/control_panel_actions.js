@@ -1,7 +1,7 @@
-import { SETTINGS_ITEM_NAME, get_random_color_hex, display_info_box } from "reusable";
+import { SETTINGS_ITEM_NAME, display_info_box, get_random_array_element } from "reusable";
 import template_wheels from "data/wheels.json" assert { type: 'json' };
 import { get_input_template } from "control_panel";
-import { show_wheel } from "mechanics";
+import { change_wheel_event } from "mechanics";
 
 const init_wheels_events = (element, wheels_data, wheel_event) => {
     const wheel_options = document.querySelectorAll('.wheel-entry');
@@ -15,14 +15,9 @@ const init_wheels_events = (element, wheels_data, wheel_event) => {
     });
 };
 
-const change_wheel_event = (element, wheel_data) => {
-    // Gives random colors to elements if they are not set
-    wheel_data.elements.forEach(element => {
-        if(!element.hasOwnProperty('color')) element.color = get_random_color_hex();
-        if(!element.hasOwnProperty('text_color')) element.text_color = '#000000'; 
-    });
-
-    show_wheel(300, 300, 250, wheel_data.elements, true);
+const delete_wheel_element = (wheel_id) => {
+    const element = document.querySelector(`.form-group[wheel-id="${wheel_id}"]`);
+    if(element) element.remove();
 };
 
 const delete_wheel_event = (element, wheel_data) => {
@@ -38,9 +33,15 @@ const delete_wheel_event = (element, wheel_data) => {
     settings.wheels = wheels;
 
     localStorage.setItem(SETTINGS_ITEM_NAME, JSON.stringify(settings));
-    display_info_box('Wheel was successfully deleted.', 'success');
+    delete_wheel_element(wheel_data.id);
 
-    // display_wheels_to_delete(element);
+    const spin_button = document.querySelector('.start-button');
+    if(parseInt(spin_button.getAttribute('wheel-id')) === wheel_data.id) {
+        const random_wheel = wheels.length > 0 ? get_random_array_element(wheels) : template_wheels[0];
+        change_wheel_event(element, random_wheel);
+    }
+
+    display_info_box('Wheel was successfully deleted.', 'success');
 };
 
 const display_wheels = (element, additional_classes) => {
@@ -61,13 +62,11 @@ const display_wheels = (element, additional_classes) => {
 
 // Display all available wheels to choose in the given element
 const display_available_wheels = (element) => {
-    // element.innerHTML = '';
     const wheels = display_wheels(element, 'wheel-entry choose-wheel');
     init_wheels_events(element, wheels, change_wheel_event);
 };
 
 const display_wheels_to_delete = (element) => {
-    // element.innerHTML = '';  
     const wheels = display_wheels(element, 'wheel-entry wheel-to-delete');
     init_wheels_events(element, wheels, delete_wheel_event);
 };
