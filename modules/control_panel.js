@@ -1,11 +1,14 @@
-import { arrow_icon, display_info_box, clear_form, SETTINGS_ITEM_NAME } from "reusable";
+import { arrow_icon, display_info_box, clear_form, SETTINGS_ITEM_NAME,
+    BOX_STATUSES } from "reusable";
 import templates_data from "data/templates.json" assert { type: 'json' };
-import { display_available_wheels, display_wheels_to_delete } from "control_panel_actions"; 
+import { display_available_wheels, display_wheels_to_delete,
+    display_wheels_to_edit } from "control_panel_actions"; 
 
 // Each action must return true if resolved, else false
 const CONTROL_PANEL_ACTIONS = {
     'display_available_wheels_action': display_available_wheels,
-    'display_wheels_to_delete_action': display_wheels_to_delete
+    'display_wheels_to_delete_action': display_wheels_to_delete,
+    'display_wheels_to_edit_action': display_wheels_to_edit
 };
 
 // Control's input template
@@ -175,9 +178,13 @@ const manage_existing_setting = (submit_option, settings, controls_json, control
         case 'remove_from':
             // not implemented yet
         break;
+
+        case 'edit_in':
+
+        break;
     }
 
-    display_info_box('Created!', 'success');
+    display_info_box('Created!', BOX_STATUSES.SUCCESS);
 };
 
 // Override whole control setting options with new ones
@@ -193,7 +200,7 @@ const override_control_setting_options = (settings, controls_json, controls_slug
         settings[controls_slug][option_name_slug] = option_input.value;
     });
 
-    display_info_box('Saved!', 'success');    
+    display_info_box('Saved!', BOX_STATUSES.SUCCESS);
 };
 
 // Saves settings to the localStorage

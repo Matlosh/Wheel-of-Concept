@@ -16,6 +16,11 @@
                 "name": "Choose Wheel to delete",
                 "type": "redirect-to-controls",
                 "redirect_to": "delete_wheel"
+            },
+            {
+                "name": "Edit Wheel",
+                "type": "redirect-to-controls",
+                "redirect_to": "edit_wheel"
             }
         ]
     },
@@ -52,5 +57,35 @@
     "delete_wheel": {
         "title": "Choose Wheel to delete",
         "action": "display_wheels_to_delete_action"
+    },
+    "edit_wheel": {
+        "title": "Edit Wheel",
+        "action": "display_wheels_to_edit_action"
+    },
+    "edit_wheel_data": {
+        "title": "Edit Wheel's data",
+        "options": [
+            {
+                "name": "Wheel title",
+                "type": "text",
+                "save": true,
+                "template_key": "name"
+            },
+            {
+                "name": "Elements",
+                "type": "text",
+                "additional_info": "All elements must be separated with a comma.",
+                "save": true,
+                "template_key_parent": "elements",
+                "template_key_function": "split",
+                "template_key": "name"
+            },
+            {
+                "name": "Edit",
+                "type": "submit",
+                "edit_in": "wheels",
+                "template_name": "wheel"
+            }
+        ]
     }
 }

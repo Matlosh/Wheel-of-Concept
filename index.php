@@ -26,7 +26,7 @@
     <?php include_once './partials/reusable.php'; ?>
 
     <section id="content" class="flex-container align-center justify-center dir-column">
-        <h2>Wheel name</h2>
+        <h2 id="wheel-title"></h2>
 
         <div class="wheel-container">
             <canvas id="wheel" width="600" height="600">Wheel drawn in canvas.</canvas>
@@ -52,6 +52,24 @@
 
     <div id="info-box">
         <p>Saved!</p>
+    </div>
+
+    <div id="alert-box">
+        <div class="container warning">
+            <div class="text">
+                <p>Do you want to [...]?</p>
+            </div>
+    
+            <div class="choices">
+                <div class="yes choice" data-choice-value="true">
+                    <p>Yes</p>
+                </div>
+    
+                <div class="no choice" data-choice-value="false">
+                    <p>No</p>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script type="module" src="./assets/js/main.js"></script>

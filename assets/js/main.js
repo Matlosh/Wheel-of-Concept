@@ -1,5 +1,6 @@
 import { show_wheel } from "mechanics";
-import { class_switch, WHEEL_X, WHEEL_Y, WHEEL_RADIUS, SHOULD_CREATE_INDICATOR } from "reusable";
+import { class_switch, remove_all_additional_attributes,
+    WHEEL_X, WHEEL_Y, WHEEL_RADIUS, SHOULD_CREATE_INDICATOR, display_alert_box } from "reusable";
 import { inflate_panel } from "control_panel";
 import wheel_data from "data/wheels.json" assert { type: 'json' };
 import controls_data from "data/controls.json" assert { type: 'json' };
@@ -28,7 +29,10 @@ const control_panel_init = () => {
     inflate_panel(controls_data, 'menu', control_panel_container);
 
     const panel_menu_menu = document.querySelector('#control-panel > .panel-menu > .menu');
-    panel_menu_menu.addEventListener('click', () => inflate_panel(controls_data, 'menu', control_panel_container));
+    panel_menu_menu.addEventListener('click', () => {
+        remove_all_additional_attributes(control_panel_container);
+        inflate_panel(controls_data, 'menu', control_panel_container)   
+    });
 };
 
 window.addEventListener('load', e => {
