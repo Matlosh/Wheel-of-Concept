@@ -80,8 +80,10 @@ const spin_wheel = (wheel, spin_step, start_button = null, wheel_output = null) 
             if(start_button !== null)
                 start_button.classList.remove('active');
 
-                if(wheel_output !== null)
-                    wheel_output.textContent = `${drawn_element.element.name} won!`;
+            console.log(wheel);
+
+            if(wheel_output !== null)
+                wheel_output.textContent = `${drawn_element.element.name} won!`;
         }
     }, 1);
 };

@@ -12,6 +12,7 @@ controls.json (option keys):
         template_key -> key that this control's value will be attached to in created json
         template_key_function -> additional function that will be executed on the "template_key" control's value
         template_key_parent -> (only if template_key_function is present) parent (in json hierarchy) of the "template_key" control's value
+        template_key_reverse_function -> additional function that will be executed on the try to fill the "template_key"'s input element
 
     redirect-to-controls:
         redirect_to -> controls name that redirect-to-controls option should redirect to
@@ -21,6 +22,9 @@ controls.json (option keys):
         append_to -> name of the key of the array that this controls data should be appended to
         remove_from -> 
         template_name ->
+
+    on_submit (used in edit_in):
+        id_in -> shows in which selector (and data attribute) can object's id be found
 
 (unused)
 templates.json - contains templates for creating json files from the controls options

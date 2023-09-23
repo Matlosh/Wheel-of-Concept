@@ -1,4 +1,4 @@
-import { arrow_icon, display_info_box, clear_form, SETTINGS_ITEM_NAME,
+import { arrow_icon, display_info_box, clear_form, get_string_slug, SETTINGS_ITEM_NAME,
     BOX_STATUSES } from "reusable";
 import templates_data from "data/templates.json" assert { type: 'json' };
 import { display_available_wheels, display_wheels_to_delete,
@@ -21,7 +21,7 @@ const get_input_template = (additional_classes, additional_data, inner_html) => 
 };
 
 const create_input = (option) => {
-    let option_name_slug = option.name.toLowerCase().replace(' ', '_');
+    let option_name_slug = get_string_slug(option.name);
     let option_additional_info = option.hasOwnProperty('additional_info') ? option.additional_info : '';
     let input_html = '';
 
@@ -119,13 +119,13 @@ const find_template_name = (controls_data) => {
 };
 
 // Creates json using data from controls_data by mapping it with template_json rules
-const create_json_from_template = (template_json, controls_data) => {
+const create_object_from_template = (template_json, controls_data) => {
     let json = {};
     json['id'] = Date.now();
     let template_name = find_template_name(controls_data);
 
     controls_data.options.forEach(option => {
-        let option_name_slug = option.name.toLowerCase().replace(' ', '_');
+        let option_name_slug = get_string_slug(option.name);
         const option_input = document.querySelector(`#control-panel .panel-container input[name="${option_name_slug}"]`);
 
         if(option.hasOwnProperty('template_key') && !option.hasOwnProperty('template_key_function')) {
@@ -164,15 +164,16 @@ const create_json_from_template = (template_json, controls_data) => {
 
 // Appends or removes data to/from the passed setting
 const manage_existing_setting = (submit_option, settings, controls_json, controls_slug) => {
-    const action = submit_option.hasOwnProperty('append_to') ? 'append_to' : 'remove_from';
-    const append_to = submit_option[action];
+    const action = submit_option.on_submit.action;
+    const action_value = submit_option.on_submit.value;
 
-    if(!settings.hasOwnProperty(append_to)) settings[append_to] = [];
+    const object = create_object_from_template(templates_data, controls_json[controls_slug]);
 
     switch(action) {
         case 'append_to':
-            const json = create_json_from_template(templates_data, controls_json[controls_slug]);
-            settings[append_to].push(json);
+            if(!settings.hasOwnProperty(action_value)) settings[action_value] = [];
+
+            settings[action_value].push(object);
         break;
 
         case 'remove_from':
@@ -180,7 +181,22 @@ const manage_existing_setting = (submit_option, settings, controls_json, control
         break;
 
         case 'edit_in':
+            if(!settings.hasOwnProperty(action_value)) {
+                display_info_box("Option to edit doesn't exist!", BOX_STATUSES.ERROR);
+                return;
+            }
 
+            if(!submit_option.on_submit.hasOwnProperty('id_in')) {
+                display_info_box("Couldn't find selector of the element's that contains the object's ID.", BOX_STATUSES.ERROR);
+                return;
+            }
+
+            const id_attribute_element = document.querySelector(submit_option.on_submit.id_in.selector);
+            const id = id_attribute_element.getAttribute(submit_option.on_submit.id_in.data_attribute_name);
+            object.id = parseInt(id);
+
+            let found_setting_index = settings[action_value].findIndex(entry => entry.id === object.id);
+            settings[action_value][found_setting_index] = object;
         break;
     }
 
@@ -194,7 +210,7 @@ const override_control_setting_options = (settings, controls_json, controls_slug
     controls_json[controls_slug].options.forEach(option => {
         if(!option.save && option.save !== true) return;
 
-        const option_name_slug = option.name.toLowerCase().replace(' ', '_');
+        const option_name_slug = get_string_slug(option.name);
         const option_input = document.querySelector(`#control-panel input[name="${option_name_slug}"]`);
         
         settings[controls_slug][option_name_slug] = option_input.value;
@@ -219,7 +235,7 @@ const save_settings = (controls_json, controls_slug) => {
             submit_option = option;
     });
 
-    if(submit_option.hasOwnProperty('append_to') || submit_option.hasOwnProperty('remove_from'))
+    if(submit_option.hasOwnProperty('on_submit'))
         manage_existing_setting(submit_option, settings, controls_json, controls_slug);
     else
         override_control_setting_options(settings, controls_json, controls_slug);

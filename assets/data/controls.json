@@ -45,7 +45,10 @@
             {
                 "name": "Create",
                 "type": "submit",
-                "append_to": "wheels",
+                "on_submit": {
+                    "action": "append_to",
+                    "value": "wheels"
+                },
                 "template_name": "wheel"
             }
         ]
@@ -63,7 +66,7 @@
         "action": "display_wheels_to_edit_action"
     },
     "edit_wheel_data": {
-        "title": "Edit Wheel's data",
+        "title": "Edit Wheel data",
         "options": [
             {
                 "name": "Wheel title",
@@ -78,12 +81,20 @@
                 "save": true,
                 "template_key_parent": "elements",
                 "template_key_function": "split",
-                "template_key": "name"
+                "template_key": "name",
+                "template_key_reverse_function": "join"
             },
             {
                 "name": "Edit",
                 "type": "submit",
-                "edit_in": "wheels",
+                "on_submit": {
+                    "action": "edit_in",
+                    "value": "wheels",
+                    "id_in": {
+                        "selector": ".panel-container",
+                        "data_attribute_name": "data-edit-wheel-id" 
+                    }
+                },
                 "template_name": "wheel"
             }
         ]

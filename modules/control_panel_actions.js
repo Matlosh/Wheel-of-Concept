@@ -62,6 +62,30 @@ const find_first_value_in_objects_array = (array, key) => {
     return null;
 };
 
+// Finds given value(s) in object by searching object with the given key(s)
+const find_value_in_object = (object, keys) => {
+    let values = [];
+
+    for(const [key, value] of Object.entries(object)) {
+        if(key === keys[0] && typeof(value) !== 'object') {
+            values.push(value);
+            continue;
+        }
+
+        if(key === keys[0] && typeof(value) === 'object') {
+            if(Array.isArray(value)) {
+                value.forEach(element => {
+                    values.push(...find_value_in_object(element, keys.slice(1)));
+                });
+            }
+
+            values.push(...find_value_in_object(value, keys.slice(1)));
+        }
+    }
+
+    return values;
+};
+
 const edit_wheel_event = (element, wheel_data) => {
     element.setAttribute('data-edit-wheel-id', wheel_data.id);
 
@@ -72,6 +96,7 @@ const edit_wheel_event = (element, wheel_data) => {
         return option.type === 'submit'
     });
 
+    // console.log(wheel_data);
     for(const [key, option] of Object.entries(edit_controls['options'])) {
         const value_name_path = [];
 
@@ -82,18 +107,26 @@ const edit_wheel_event = (element, wheel_data) => {
             continue;
 
         value_name_path.push(option['template_key']);
-        
-        let template = templates_json[submit_option['template_name']];
-        value_name_path.forEach((template_key, i) => {
-            const objects_array_first_value = find_first_value_in_objects_array(template, template_key);
-            if(objects_array_first_value)
-                template = objects_array_first_value;
-            else
-                template = template[template_key];
-        });
 
-        // continue here with making editing work
-        console.log(template);
+        // Checks if the option is saved - it means that it should have an input
+        // its value is written to
+        if(!option.hasOwnProperty('save') || !option.save)
+            continue;
+
+        const input_name = get_string_slug(option.name);
+        const input_element = document.querySelector(`input[name="${input_name}"]`);
+        let values = find_value_in_object(wheel_data, value_name_path);
+
+        if(option.hasOwnProperty('template_key_reverse_function')) {
+            let reverse_function = option['template_key_reverse_function'];
+
+            if(reverse_function === 'join') {
+                input_element.value = values.join(', ');
+                continue;
+            }
+        }
+
+        input_element.value = values[0];
     }
 };
 
